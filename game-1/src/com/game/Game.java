@@ -22,14 +22,14 @@ public class Game {
         setGameMaxTurn(1000);
     }
 
-    public void run(){
-        while(true){
-            if (players.get(currentTurn%2).getStrategy().getAnswer(currentAnswer)!=currentAnswer+1){
-                winner=players.get((currentTurn+1)%2);
+    public void run() {
+        while (true) {
+            if (players.get(currentTurn % 2).getStrategy().getAnswer(currentAnswer) != currentAnswer + 1) {
+                winner = players.get((currentTurn + 1) % 2);
                 break;
             }
             currentTurn++;
-            if(gameMaxTurn==currentTurn){
+            if (gameMaxTurn == currentTurn) {
                 break;
             }
         }
