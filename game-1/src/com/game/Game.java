@@ -56,13 +56,14 @@ public class Game {
                 winner = players.get((currentTurn+1) % 2);
                 break;
             }
-            currentLetter = getLastLetterFromWord(answer);
+            usedWords.add(answer);
             currentTurn++;
             // TODO: correct end game
 
-            if (gameMaxTurn == currentTurn) {
+            if (usedWords.size()==dictionary.size()) {
                 break;
             }
+            currentLetter = getLastLetterFromWord(answer);
         }
     }
 
