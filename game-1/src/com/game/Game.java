@@ -66,7 +66,28 @@ public class Game {
 
     // TODO
     private char getLastLetterFromWord(String answer) {
-        return answer.charAt(answer.length()-1);
+        int i = answer.charAt(answer.length()-1);
+        while (i>=0){
+            if (isPossible(answer.charAt(i))){
+                return answer.charAt(i);
+            }
+            i--;
+        }
+        //getRandomLetterFromNotUsed();
+        String notUsedLetters = "";
+        for (int j = 0; j<dictionary.size(); j++){
+            if (!usedWords.contains(dictionary.get(j))) notUsedLetters+=dictionary.get(j).charAt(0);
+        }
+        Random rand = new Random();
+        return notUsedLetters.charAt(rand.nextInt(notUsedLetters.length()));
+
+    }
+
+    private boolean isPossible(char c){
+        for (int i = 0; i < dictionary.size(); i++) {
+            if ((dictionary.get(i).charAt(0) == c) &&(!usedWords.contains(dictionary.get(i)))) return true;
+        }
+        return false;
     }
 
     public List<Player> getPlayers() {
