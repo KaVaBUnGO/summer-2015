@@ -49,6 +49,7 @@ public class Game {
 
     public void run() {
         while (true) {
+            System.out.println("Current letter = " + currentLetter);
             String answer = players.get(currentTurn % 2).getStrategy().getAnswer(dictionary, usedWords, currentLetter);
             System.out.println(players.get(currentTurn % 2).getName()+" give answer: " + answer);
             if (usedWords.contains(answer) || !dictionary.contains(answer)) {
@@ -58,6 +59,7 @@ public class Game {
             currentLetter = getLastLetterFromWord(answer);
             currentTurn++;
             // TODO: correct end game
+
             if (gameMaxTurn == currentTurn) {
                 break;
             }
@@ -66,7 +68,7 @@ public class Game {
 
     // TODO
     private char getLastLetterFromWord(String answer) {
-        int i = answer.charAt(answer.length()-1);
+        int i = answer.length()-1;
         while (i>=0){
             if (isPossible(answer.charAt(i))){
                 return answer.charAt(i);
