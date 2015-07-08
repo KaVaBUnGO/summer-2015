@@ -14,7 +14,6 @@ public class SimpleStrategy implements Strategy {
             if ((dictionary.get(i).charAt(0) == currentLetter) && (!usedWords.contains(dictionary.get(i)))) {
                 return dictionary.get(i);
             }
-
         }
         // тут считать что обязательно есть слово в словаре?
         return null;

@@ -12,19 +12,20 @@ import java.util.*;
  */
 public class Game {
     private static final String ALPHABET = "ёйцукенгшщзхфывапролджэячсмитбю";
-    private List<Player> players;
+    private List<ExtendedPlayer> players;
     private int currentTurn;
     private int gameMaxTurn;
     private Player winner;
     private List<String> dictionary = new ArrayList<>();
     private Set<String> usedWords = new HashSet<>();
     private char currentLetter;
+    private long totalDuration = 0;
 
 
     public Game(Player player1, Player player2) {
-        players = new ArrayList<Player>();
-        players.add(player1);
-        players.add(player2);
+        players = new ArrayList<>();
+        players.add(new ExtendedPlayer(player1));
+        players.add(new ExtendedPlayer(player2));
         setCurrentTurn(0);
         setGameMaxTurn(1000);
         loadDictionary();
@@ -48,12 +49,17 @@ public class Game {
     }
 
     public void run() {
+        players.get(0).getPlayer().getStrategy().getAnswer(dictionary, usedWords, 'a');
+        long startGameTime = System.nanoTime();
         while (true) {
-            System.out.println("Current letter = " + currentLetter);
-            String answer = players.get(currentTurn % 2).getStrategy().getAnswer(dictionary, usedWords, currentLetter);
-            System.out.println(players.get(currentTurn % 2).getName() + " give answer: " + answer);
+            ExtendedPlayer currentPlayer = players.get(currentTurn % 2);
+            long startTurnTime = System.nanoTime();
+            String answer = currentPlayer.getPlayer().getStrategy().getAnswer(dictionary, usedWords, currentLetter);
+            long endTurnTime = System.nanoTime();
+            long elapsedTime = endTurnTime - startTurnTime;
+            currentPlayer.incDuration(elapsedTime);
             if (usedWords.contains(answer) || !dictionary.contains(answer)) {
-                winner = players.get((currentTurn + 1) % 2);
+                winner = players.get((currentTurn + 1) % 2).getPlayer();
                 break;
             }
             usedWords.add(answer);
@@ -64,7 +70,12 @@ public class Game {
                 break;
             }
             currentLetter = getLastLetterFromWord(answer);
+            if (getCurrentTurn() == getGameMaxTurn()) {
+                break;
+            }
         }
+        long endGameTime = System.nanoTime();
+        incTotalDuration(endGameTime - startGameTime);
     }
 
     // TODO
@@ -83,7 +94,6 @@ public class Game {
         }
         Random rand = new Random();
         return notUsedLetters.charAt(rand.nextInt(notUsedLetters.length()));
-
     }
 
     private boolean isPossible(char c) {
@@ -93,11 +103,18 @@ public class Game {
         return false;
     }
 
-    public List<Player> getPlayers() {
+    public void printTotalDuration() {
+        System.out.println("Total game duration = " + getTotalDuration() + " nanoseconds");
+        for (ExtendedPlayer player : players) {
+            System.out.println(player.getPlayer().getName() + " total duration = " + player.getDuration() + " nanoseconds");
+        }
+    }
+
+    public List<ExtendedPlayer> getPlayers() {
         return players;
     }
 
-    public void setPlayers(List<Player> players) {
+    public void setPlayers(List<ExtendedPlayer> players) {
         this.players = players;
     }
 
@@ -131,5 +148,17 @@ public class Game {
 
     public void setDictionary(List<String> dictionary) {
         this.dictionary = dictionary;
+    }
+
+    public long getTotalDuration() {
+        return totalDuration;
+    }
+
+    public void incTotalDuration(long totalDuration) {
+        this.totalDuration += totalDuration;
+    }
+
+    public void setTotalDuration(long totalDuration) {
+        this.totalDuration = totalDuration;
     }
 }
