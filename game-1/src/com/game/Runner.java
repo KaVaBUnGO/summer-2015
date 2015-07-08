@@ -5,9 +5,25 @@ package com.game;
  */
 public class Runner {
     public static void main(String[] args) {
-        Game game = new Game(new SimplePlayer(1), new SimplePlayer(2));
+        runComplexSimulation(10);
+    }
+
+    private static Player runSingleSimulation(Player player1, Player player2) {
+        Game game = new Game(player1, player2);
         game.run();
         game.printTotalDuration();
-        System.out.println(game.getWinner() == null ? "DRAW" : "winner = " + game.getWinner().getName());
+        return game.getWinner();
+    }
+
+    private static void runComplexSimulation(int totalSimulationCount) {
+        int currentSimulationCount = 0;
+        Player player1 = new SimplePlayer(1);
+        Player player2 = new SimplePlayer(2);
+        ComplexSimulationResults results = new ComplexSimulationResults(player1, player2);
+        while (currentSimulationCount++ < totalSimulationCount) {
+            Player winner = runSingleSimulation(player1, player2);
+            results.addGameResult(winner);
+        }
+        results.printResults();
     }
 }

@@ -27,4 +27,16 @@ public class Player {
     public void setStrategy(Strategy strategy) {
         this.strategy = strategy;
     }
+
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        Player targetPlayer = (Player) obj;
+        return ((Player) obj).name.equals(this.name);
+    }
 }
