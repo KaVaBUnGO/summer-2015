@@ -51,16 +51,16 @@ public class Game {
         while (true) {
             System.out.println("Current letter = " + currentLetter);
             String answer = players.get(currentTurn % 2).getStrategy().getAnswer(dictionary, usedWords, currentLetter);
-            System.out.println(players.get(currentTurn % 2).getName()+" give answer: " + answer);
+            System.out.println(players.get(currentTurn % 2).getName() + " give answer: " + answer);
             if (usedWords.contains(answer) || !dictionary.contains(answer)) {
-                winner = players.get((currentTurn+1) % 2);
+                winner = players.get((currentTurn + 1) % 2);
                 break;
             }
             usedWords.add(answer);
             currentTurn++;
             // TODO: correct end game
 
-            if (usedWords.size()==dictionary.size()) {
+            if (usedWords.size() == dictionary.size()) {
                 break;
             }
             currentLetter = getLastLetterFromWord(answer);
@@ -69,26 +69,26 @@ public class Game {
 
     // TODO
     private char getLastLetterFromWord(String answer) {
-        int i = answer.length()-1;
-        while (i>=0){
-            if (isPossible(answer.charAt(i))){
+        int i = answer.length() - 1;
+        while (i >= 0) {
+            if (isPossible(answer.charAt(i))) {
                 return answer.charAt(i);
             }
             i--;
         }
         //getRandomLetterFromNotUsed();
         String notUsedLetters = "";
-        for (int j = 0; j<dictionary.size(); j++){
-            if (!usedWords.contains(dictionary.get(j))) notUsedLetters+=dictionary.get(j).charAt(0);
+        for (int j = 0; j < dictionary.size(); j++) {
+            if (!usedWords.contains(dictionary.get(j))) notUsedLetters += dictionary.get(j).charAt(0);
         }
         Random rand = new Random();
         return notUsedLetters.charAt(rand.nextInt(notUsedLetters.length()));
 
     }
 
-    private boolean isPossible(char c){
+    private boolean isPossible(char c) {
         for (int i = 0; i < dictionary.size(); i++) {
-            if ((dictionary.get(i).charAt(0) == c) &&(!usedWords.contains(dictionary.get(i)))) return true;
+            if ((dictionary.get(i).charAt(0) == c) && (!usedWords.contains(dictionary.get(i)))) return true;
         }
         return false;
     }
