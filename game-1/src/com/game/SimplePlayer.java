@@ -5,6 +5,6 @@ package com.game;
  */
 public class SimplePlayer extends Player {
     public SimplePlayer(int playerNumber) {
-        super("Player"+playerNumber, new SimpleStrategy());
+        super("Player" + playerNumber, new SimpleStrategy());
     }
 }

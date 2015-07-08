@@ -1,7 +1,5 @@
 package com.game;
 
-import com.sun.deploy.util.StringUtils;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -27,7 +25,7 @@ public class Game {
         players.add(new ExtendedPlayer(player1));
         players.add(new ExtendedPlayer(player2));
         setCurrentTurn(0);
-        setGameMaxTurn(1000);
+        setGameMaxTurn(10000);
         loadDictionary();
         currentLetter = getRandomLetter();
     }
@@ -58,7 +56,7 @@ public class Game {
             long endTurnTime = System.nanoTime();
             long elapsedTime = endTurnTime - startTurnTime;
             currentPlayer.incDuration(elapsedTime);
-            if (usedWords.contains(answer) || !dictionary.contains(answer)) {
+            if (answer == null || usedWords.contains(answer) || !dictionary.contains(answer)) {
                 winner = players.get((currentTurn + 1) % 2).getPlayer();
                 break;
             }
@@ -70,6 +68,7 @@ public class Game {
                 break;
             }
             currentLetter = getLastLetterFromWord(answer);
+
             if (getCurrentTurn() == getGameMaxTurn()) {
                 break;
             }
@@ -104,9 +103,9 @@ public class Game {
     }
 
     public void printTotalDuration() {
-        System.out.println("Total game duration = " + getTotalDuration() + " nanoseconds");
+        System.out.println("Total game duration = " + getTotalDuration() / 1000000 + " ms");
         for (ExtendedPlayer player : players) {
-            System.out.println(player.getPlayer().getName() + " total duration = " + player.getDuration() + " nanoseconds");
+            System.out.println(player.getPlayer().getName() + " total duration = " + player.getDuration() / 1000000 + " ms");
         }
     }
 
